@@ -17,21 +17,26 @@ void heapify(int* arr, int size, int parent){
     if(child*2<=size) heapify(arr, size, child); // root -> leaf로 재귀
 }
 
-int main() {
-    int len = 10;
-    int arr[11] = {-1, 1,10,5,8,7,6,4,3,2,9};
-
-    // max heap
-    for(int i = len / 2; i > 0; i--) {
+void Construct_heap(int* arr, int len){ // max heap contruction
+        for(int i = len / 2; i > 0; i--) {
         heapify(arr, len, i);
     }
-    
-    // sort
+}
+
+void Sorting(int* arr, int len){ // sorting
     for(int i = len; i > 1; i--) {
         swap(arr, i, 1); // root를 arr 뒤편으로 삽입 -> 오름차순으로 됨(not max_heap)
         heapify(arr, i - 1, 1); // 뒤로 보낸 root를 제외한 나머지 heapify
     }
+}
 
+int main() {
+    int len = 10;
+    int arr[11] = {-1, 1,10,5,8,7,6,4,3,2,9};
+    
+    Construction_heap(arr, len);
+    Sorting(arr, len);
+    
     for(int i = 1; i <= len; i++) {
         printf("%d ", arr[i]);
     }
