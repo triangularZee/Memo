@@ -1,0 +1,61 @@
+#include <iostream>
+
+using namespace std;
+
+int sorted[1000001];
+
+void Merge(int* arr, int start, int mid, int end){
+    int left = start, right = mid+1;
+    int idx = start;
+    
+    while(left <= mid && right <= end){ // 작은 순으로 몰아주기
+        if(arr[left] < arr[right]){
+            sorted[idx++] = arr[left++];
+        }
+        else sorted[idx++] = arr[right++];
+    } 
+    
+    for(int i=left; i<=mid; i++){ // 나머지 몰아주기 
+        sorted[idx++] = arr[i];
+    }
+    
+    for(int i=right; i<=end; i++){ // 나머지 몰아주기
+        sorted[idx++] = arr[i];
+    }
+    
+    for(int i=start; i<=end; i++){ // 복사/수정하기
+        arr[i] = sorted[i];
+    }
+    
+}
+
+
+void Merge_Sort(int* arr, int start, int end){
+    if(start < end){
+        int mid = (start+end)/2;
+        Merge_Sort(arr, start, mid);
+        Merge_Sort(arr, mid+1, end);
+        Merge(arr, start, mid, end);
+    }
+}
+
+
+
+
+int main(){
+    int n, t;
+    cin >> n;
+    int arr[1000001];
+    
+    for(int i=0; i<n; i++){
+        cin >> t;
+        arr[i] = t;
+        cin.ignore();
+    }
+    
+    Merge_Sort(arr, 0, n-1);
+    
+    for(int i=0; i<n; i++){
+        cout << arr[i] << ' ';
+    }
+}
