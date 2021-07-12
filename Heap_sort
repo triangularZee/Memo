@@ -1,0 +1,38 @@
+
+#include <iostream>
+
+using namespace std;
+
+void swap(int* arr, int src, int des){
+    int temp = arr[src];
+    arr[src] = arr[des];
+    arr[des] = temp;
+}
+
+void heapify(int* arr, int size, int parent){
+    if(parent == size) return; // sorting 시 root 바로 다음 leaf와의 스왑문제때문.
+    int child = parent * 2;
+    if(child+1<=size && arr[child] < arr[child+1]) child++; // child+1<=size는 sorting시 이미 소트된 부분까지 건들일 수 있어서, 0으로 초기화된 배열 내 항목과 스왑 가능성
+    if(arr[parent]<arr[child]) swap(arr, child, parent); // max_heap을 위한 스왑
+    if(child*2<=size) heapify(arr, size, child); // root -> leaf로 재귀
+}
+
+int main() {
+    int len = 10;
+    int arr[11] = {-1, 1,10,5,8,7,6,4,3,2,9};
+
+    // max heap
+    for(int i = len / 2; i > 0; i--) {
+        heapify(arr, len, i);
+    }
+    
+    // sort
+    for(int i = len; i > 1; i--) {
+        swap(arr, i, 1); // root를 arr 뒤편으로 삽입 -> 오름차순으로 됨(not max_heap)
+        heapify(arr, i - 1, 1); // 뒤로 보낸 root를 제외한 나머지 heapify
+    }
+
+    for(int i = 1; i <= len; i++) {
+        printf("%d ", arr[i]);
+    }
+}
