@@ -6,7 +6,7 @@
 using namespace std;
 
 void solve(string str){
-    map<string, string> m;
+    map<string, string> m; // The container of MAP sorts itself by KEY without any manipulation.
     
     for(int i=0; i<str.size(); i++){
         m.insert(pair<string,string>(str.substr(i,str.size()),str.substr(i,str.size())));
