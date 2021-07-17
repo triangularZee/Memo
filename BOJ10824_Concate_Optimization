@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <string>
+
+using namespace std;
+
+string concate(string str1, string str2){ //Concatenate Optimization for cpp
+    string str;
+    str.reserve(str1.size() + str2.size());
+    str += str1;
+    str += str2;
+    return str;
+}
+
+int main(){
+    string a, b, c, d;
+    long long ret;
+    cin >> a >> b >> c >> d;
+    a = concate(a,b);
+    c = concate(c,d);
+    ret = stoll(a)+stoll(c);
+    cout << ret;
+    return 0;
+}
