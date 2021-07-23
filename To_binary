@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <list>
+#include <string>
+#include <cmath>
+#include <bitset>
+#include <algorithm>
+
+using namespace std;
+
+string to_binary1_with_bitshift(int n){
+    string str = "";
+    while(n!=0){
+        if(n%2 == 1) str = '1' + str;
+        else str = '0' + str;
+        n >>= 1;
+    }
+    return str;
+}
+
+string to_binary2_with_bitshift(int n){
+    string str = "";
+    while(n!=0){
+        if(n%2 == 1) str = str + '1';
+        else str = str + '0';
+        n >>= 1;
+    }
+    return str;
+}
+
+string to_binary_with_bitset(int n){
+    bitset<100> bs(n); // capacity 2^100의 자료구조
+    string str = bs.to_string(); 
+    str = str.substr(str.find('1')); // bitset이 '0'으로 가득차있음. 그래서 첫 '1'부터 시작하게 서브스트링
+    cout << str;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    
+    cout << to_binary1(n) << ' ' << to_binary2(n) << ' ' << to_binary_with_bitset(n);
+
+    return 0;
+}
+
+
+// if input is 10, then the output is 1010 0101 1010
