@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
+
+
+void solve(string str){
+    vector<int> iv;
+    for(int i=str.size()-1; i>=0; i--){ // reverse 때문에 str의 가장 끝원소부터
+        int k = str[i]-'0';
+        for(int j=0; j<3; j++){ // 3개씩 chunking && 처음 들어가는 것이 진법 변환한 수의 가장 끝자리
+            iv.push_back(k%2);
+            k /= 2;
+        }
+    }
+    reverse(iv.begin(),iv.end()); 
+    auto it = find(iv.begin(),iv.begin()+2,1); // 8진법 수의 첫번째 수를 2진법 변환시 첫 0을 제거해주어야 함. 예컨대 3_(8)이라면 011_(2)가 아닌 11_(2)로 표시되어야 함.
+    for(auto iter = it; iter<iv.end(); iter++){ // 바로 위 라인에서 찾은 iterator부터 시작해야 온전한 변환된 2진법 수가 추출됨.
+        cout << *(iter);
+    }
+}
+
+int main(){
+    string k;
+    cin >> k;
+    solve(k);
+    
+    return 0;
+}
