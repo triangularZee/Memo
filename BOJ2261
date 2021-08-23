@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <cstring>
+#include <climits>
+#include <stack>
+#include <string>
+#include <utility>
+
+using namespace std;
+
+
+vector<pair<int,int>> pv;
+
+struct Comp {
+    bool comp_in_x;
+    Comp(bool b) : comp_in_x(b) {}
+    bool operator()(pair<int,int> &p, pair<int,int> &q) {
+        return (this->comp_in_x? p.first < q.first : p.second < q.second);
+    }
+};
+ 
+    
+int dist(const pair<int, int>& p1, const pair<int,int>& p2){
+    int x = p1.first - p2.first;
+    int y = p1.second - p2.second;
+    return pow(x,2) + pow(y,2);
+}
+
+int narrowest(int l, int r){
+    int n = r-l+1;
+    if(n == 2) { return dist(pv[l], pv[r]); }
+    if(n == 3) { return min({dist(pv[l], pv[r]), dist(pv[l+1], pv[l]), dist(pv[l+2], pv[l+1])}); }
+    
+//    sort(pv.begin(), pv.end(), cmp);
+    int mid = (l+r)/2;
+    int ret = min(narrowest(l, mid), narrowest(mid, r)); // (주의) 우편 시점을 mid+1로 하면 mid 부분이 미처리. 임의의 구분선 좌편, 우편 내 구하기 ---- (1)
+    
+    int x_line = (pv[mid-1].first+ pv[mid].first)/2; // 임의의 구분선
+
+    vector<pair<int, int>> points;
+    points.reserve(n);
+    
+    for(int i=l; i<r; i++){
+        if(pow((pv[i].first - x_line),2) < ret) { points.push_back(pv[i]); } // 임의의 구분선 근방 points의 거리가 (1)에서 구한 값보다 작은 경우 collecting
+    }
+    
+    sort(points.begin(), points.end(), Comp(false)); // Sort하여 내림차순으로 더 경우의 수를 넓혀서 접근. 이는 하단의 반복문에서 y의 거리 비교를 통해서 더 정밀해질 수 있음.
+    
+    int len = (int)points.size();
+    for(int i=0; i<len-1 ; i++){
+        for(int j=i+1; j<len && pow((points[j].second-points[i].second),2)<ret ; j++){ // x 좌표 간 거리로 필터링한 점들을 y 좌표 간 거리로 2차 필터링 해줌.
+            ret = min(ret, dist(points[i], points[j])); // if-break하면 더 최적화 가능. 
+        }
+    }
+    return ret;
+    
+}
+
+int main(){
+    int n, i, j;
+    cin >> n;
+    
+    for(int t=0; t<n; t++){
+        cin >> i >> j;
+        pv.push_back(make_pair(i, j));
+    }
+    
+    sort(pv.begin(), pv.end(), Comp(true)); // 포인트 정렬, 안해도 무방하나 속도경감.
+    cout << narrowest(0, n-1);
+    
+    return 0;
+}
+
