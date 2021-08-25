@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <string>
+#include <cstring>
+#define MAX 10001
+
+using namespace std;
+
+queue<int> q;
+int visited[MAX];
+bool Primer[MAX];
+
+void eratos() { // 에라토스테네스의 체 - 규모가 작을때 용이.
+    for (int i = 2; i <= 10000; i++)
+        Primer[i] = true;
+    for (int i = 2; i <= 10000; i++) {
+        for (int j = i; i * j <= 10000; j++) {
+            Primer[i * j] = false;
+        }
+    }
+}
+
+void BFS(int n, int k){
+    q.push(n);
+    visited[n] = 1;
+    while(!q.empty()){
+        int temp = q.front();
+        if(temp == k) {
+            cout << visited[temp]-1;
+            return;
+        }
+        q.pop();
+        
+        for(int i=0; i<4; i++){ // 자리 값 변환
+            for(int j=0; j<10; j++){
+                if(i == 0 && j == 0) continue;
+                string str = to_string(temp);
+                str[i] = j + '0';
+                int temper = stoi(str);
+                if(Primer[temper] && !visited[temper]){
+                    q.push(temper);
+                    visited[temper] = visited[temp] + 1;
+                }
+            }
+        }
+    }
+    cout << "impossible";
+}
+
+int main(){
+    int t, n, k;
+    cin >> t;
+    
+    eratos();
+    for(int i=0; i<t; i++){
+        cin >> n >> k;
+        memset(visited, 0, sizeof(visited));
+        q = queue<int>(); // queue 초기화
+        BFS(n,k);
+        cout << endl;
+    }
+    
+    return 0;
+}
