@@ -24,7 +24,7 @@ void DFS(int idx, int cnt){
     return;
    }
    
-   for(int i = idx; i < MAX; i++){
+   for(int i = idx; i < MAX; i++){ // i가 idx을 시점을 삼는 것이 조합
     if(check[i]){ // 중복 불가
       continue;
     }
