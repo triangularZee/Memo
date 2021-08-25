@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#define MAX 5
+
+using namespace std;
+
+vector<int> arr;
+vector<int> iv;
+bool check[MAX] = {0,};
+
+
+
+void show(){
+  for(int i=0; i<iv.size(); i++){
+      {
+      cout << iv[i] << ' ';
+      }
+  }
+  cout << '\n';
+}
+
+void DFS(int cnt){
+
+  if(cnt == 2) {// n = 뽑는 갯수
+    show();
+    return;
+   }
+   
+   for(int i = 0; i < MAX; i++){ // 순서 변경을 가능하게 하려면 0부터 시작.
+    if(check[i]){ // 중복 불가
+      continue;
+    }
+    check[i] = true;
+    iv.push_back(arr[i]); // 만일 별도의 배열을 활용하 않는다면 중복문제 발생, 예) 01 02 03 04 01 10 12 13 14 10 ... 이런식으로 진행하게됨.
+    DFS(cnt+1);
+    iv.pop_back();
+    check[i] = false;
+    
+    }
+}
+
+int main(){
+    arr.push_back(0);
+    arr.push_back(1);
+    arr.push_back(2);
+    arr.push_back(3);
+    arr.push_back(4);
+    
+    DFS(0);
+    return 0;
+    
+}
