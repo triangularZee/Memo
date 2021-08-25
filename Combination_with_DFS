@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+#define MAX 100
+
+using namespace std;
+
+vector<int> arr;
+bool check[MAX] = {0,};
+int Cnt;
+
+void show(){
+  for(int i=0; i<MAX; i++){
+    if(check[i]){
+      cout << arr[i] << ' ';
+    }
+  }
+  cout << '\n';
+}
+
+void DFS(int idx, int cnt){
+
+  if(cnt == n) {// n = 뽑는 갯수
+    show();
+    return;
+   }
+   
+   for(int i =0; i<MAX; i++){
+    if(check[i]){ // 중복 불가
+      continue;
+    }
+    check[i] = true;
+    DFS(i, cnt++);
+    check[i] = false;
+    }
+}
