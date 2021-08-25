@@ -6,7 +6,6 @@ using namespace std;
 
 vector<int> arr;
 bool check[MAX] = {0,};
-int Cnt;
 
 void show(){
   for(int i=0; i<MAX; i++){
@@ -29,7 +28,7 @@ void DFS(int idx, int cnt){
       continue;
     }
     check[i] = true;
-    DFS(i, cnt++);
+    DFS(i, cnt+1);
     check[i] = false;
     }
 }
