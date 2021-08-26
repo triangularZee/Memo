@@ -1,0 +1,118 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <string>
+#include <utility>
+#include <map>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+
+int L, C;
+vector<char> Consonant, Bowel, Bowel_ex = { 'a', 'e', 'i', 'o', 'u'};
+vector<bool> check_C(21,0), check_B(5,0);
+map<string, bool> visited;
+vector<string> result;
+
+void classfier(char k){
+    if(Bowel_ex.end()==find(Bowel_ex.begin(), Bowel_ex.end(), k)){
+        Consonant.push_back(k);
+    }
+    else{
+        Bowel.push_back(k);
+    }
+}
+
+//void gather_B(){
+//    for(int i=0; i<5; i++){
+//        if(check_B[i]){
+//            iv.push_back(Bowel_ex[i]);
+//        }
+//    }
+//}
+//
+//void gather_C(){
+//    for(int i=0; i<21; i++){
+//        if(check_C[i]){
+//            iv.push_back(Consonant_ex[i]);
+//        }
+//    }
+//}
+//
+//void DFS_Bowel(int idx, int cnt, int N){
+//    if(cnt == N){
+//        gather_B();
+//        return;
+//    }
+//
+//    for(int i=idx; i<Bowel.size(); i++){
+//        auto it = find(Bowel_ex.begin(), Bowel_ex.end(), Bowel[i]);
+//        int temp = (int)distance(Bowel_ex.begin(), it);
+//        if(!check_B[temp]){ // check의 5개 배열과 Bowel의 동적배열 간 동기화 요구
+//            // bowel 내 i에 위치한 값이 check의 인덱스값으로 전환되어야.
+//            check_B[temp] = true;
+//            DFS_Bowel(i, cnt + 1, N);
+//            check_B[temp] = false;
+//        }
+//    }
+//}
+//
+//void DFS_Consonant(int idx, int cnt, int N){
+//    if(cnt == N){
+//        gather_C();
+//        return;
+//    }
+//
+//    for(int i=idx; i<Consonant.size(); i++){
+//        auto it = find(Consonant_ex.begin(), Consonant_ex.end(), Consonant[i]);
+//        int temp = (int)distance(Consonant_ex.begin(), it);
+//        if(!check_C[temp]){
+//            check_C[temp] = true;
+//            DFS_Consonant(i, cnt + 1, N);
+//            check_C[temp] = false;
+//        }
+//    }
+//}
+
+void DFS(int idx_B, int idx_C, int cnt_B, int cnt_C, string s){
+        
+        if(s.length() == L && cnt_B >= 1 && cnt_C >= 2){
+            sort(s.begin(), s.end());
+            if(!visited.count(s)){
+                visited[s] = true;
+                result.push_back(s);
+            }
+            return;
+        }
+    
+        if(s.length() == L) return;
+    
+        for(int i=idx_B + 1; i<Bowel.size(); i++){
+            DFS(i, idx_C, cnt_B + 1, cnt_C, s+Bowel[i]);
+        }
+        for(int j=idx_C + 1; j<Consonant.size(); j++){
+            DFS(idx_B, j, cnt_B, cnt_C + 1, s+Consonant[j]);
+        }
+}
+
+int main(){
+    cin >> L >> C;
+    char k;
+    for(int i=0; i<C; i++){
+        cin >> k;
+        classfier(k);
+    }
+
+    sort(Bowel.begin(), Bowel.end());
+    sort(Consonant.begin(), Consonant.end());
+    
+
+    DFS(-1, -1, 0, 0, "");
+    sort(result.begin(), result.end());
+    for(int i=0; i<result.size(); i++){
+        cout << result[i] << endl;
+    }
+    
+    return 0;
+}
