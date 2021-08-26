@@ -12,7 +12,7 @@ using namespace std;
 int L, C;
 vector<char> Consonant, Bowel, Bowel_ex = { 'a', 'e', 'i', 'o', 'u'};
 vector<bool> check_C(21,0), check_B(5,0);
-map<string, bool> visited;
+map<string, bool> visited; // **************************************** MAP container BFS/DFS 경로 중복성 때 활용가능 ********************************************
 vector<string> result;
 
 void classfier(char k){
@@ -75,7 +75,7 @@ void classfier(char k){
 //    }
 //}
 
-void DFS(int idx_B, int idx_C, int cnt_B, int cnt_C, string s){
+void DFS(int idx_B, int idx_C, int cnt_B, int cnt_C, string s){ // ********************* 두 샘플에서 뽑아서 조합 시행 
         
         if(s.length() == L && cnt_B >= 1 && cnt_C >= 2){
             sort(s.begin(), s.end());
@@ -88,7 +88,7 @@ void DFS(int idx_B, int idx_C, int cnt_B, int cnt_C, string s){
     
         if(s.length() == L) return;
     
-        for(int i=idx_B + 1; i<Bowel.size(); i++){
+        for(int i=idx_B + 1; i<Bowel.size(); i++){ ******************************* 로컬스코핑 내에서 증가 스킬 ******************************
             DFS(i, idx_C, cnt_B + 1, cnt_C, s+Bowel[i]);
         }
         for(int j=idx_C + 1; j<Consonant.size(); j++){
@@ -108,7 +108,7 @@ int main(){
     sort(Consonant.begin(), Consonant.end());
     
 
-    DFS(-1, -1, 0, 0, "");
+    DFS(-1, -1, 0, 0, ""); // ***************************  중복조합 -> 조합, 중복 제거 스킬. 로컬스코핑 내에서 증가를 통해서  *******************************
     sort(result.begin(), result.end());
     for(int i=0; i<result.size(); i++){
         cout << result[i] << endl;
