@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <string>
+#include <utility>
+#include <map>
+#define MAX 10000000
+
+using namespace std;
+
+map<int,int> Check;
+int dx[4] = {-1, 0, 1, 0};
+int dy[4] = {0, 1, 0, -1};
+
+void BFS(int start){
+    queue<int> q;
+    q.push(start);
+    Check[start] = 0;
+    while(!q.empty()){
+        int cur = q.front();
+        string s = to_string(cur);
+        q.pop();
+        
+        if(cur == 123456789) { cout << Check[cur]; return;}
+        
+        int temp = s.find('9');
+        int tempx = temp%3;
+        int tempy = temp/3;
+        
+
+        for(int i=0; i<4; i++){
+            int nextx = tempx+dx[i];
+            int nexty = tempy+dy[i];
+            
+                if(0<=nextx && nextx<=2 && 0<=nexty && nexty<=2){ 
+                    string temps = s;
+                    swap(temps[tempy*3+tempx], temps[nexty*3+nextx]);
+                    int next = stoi(temps);
+                    if(!Check.count(next)){ //중복판별(전체배열에 대한 중복성 판별)
+                        q.push(next);
+                        Check[next] = Check[cur] + 1;
+                    }
+                }
+            }
+    }
+    cout << -1;
+}
+
+int main(){
+    int start = 0, k;
+    
+    for(int i=0; i<3; i++){
+        for(int j=0; j<3; j++){
+            cin >> k;
+            if(!k){
+                k = 9;
+            }
+            start = start * 10 + k;
+        }
+    }
+    
+    BFS(start);
+    return 0;
+}
