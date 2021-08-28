@@ -1,0 +1,57 @@
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <utility>
+#include <queue>
+#include <map>
+using namespace std;
+
+int N, M;
+int GO[100][100];
+bool check[100][100] = {{0,0},};
+priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+// ************** priority queue를 사용하든 Queue<Pair<int,Pair<int,int>> Q를 활용해서 풀 수 있음. 그런데 최대최소 문제에서는 Priority Queue가 효과적 ***********************
+
+int dx[4] = {-1, 0, 1, 0};
+int dy[4] = {0, 1, 0, -1};
+
+int BFS(){
+    pq.push({0,{0,0}});
+    while(!pq.empty()){
+        int temp_x = pq.top().second.first, temp_y = pq.top().second.second;
+        int block = pq.top().first;
+        pq.pop();
+        
+        if(temp_x == N-1 && temp_y == M-1){
+            return block;
+        }
+        
+        
+        for(int i=0; i<4; i++){
+            int nx = temp_x + dx[i], ny = temp_y + dy[i];
+            if(0<=nx && nx < N && 0<=ny && ny < M){
+               if(!check[nx][ny]){
+                   if(GO[nx][ny]){
+                       pq.push({block+1,{nx,ny}});
+                   }
+                   else pq.push({block, {nx,ny}});
+                   check[nx][ny] = true;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+int main(){
+    cin >> M >> N;
+    for(int i=0; i<N;i++){
+        for(int j=0; j<M; j++){
+            scanf("%1d", &GO[i][j]);
+        }
+    }
+    
+    cout << BFS();
+
+    return 0;
+}
