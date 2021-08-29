@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+int N, S, half;
+long long ans;
+vector<int> iv;
+map<int, int> counter;
+
+void dfsLeft(int idx, int sum){
+    if(idx == half){
+        counter[sum]++;
+        return;
+    }
+    dfsLeft(idx+1, sum); // ******************************                subset만드는 알고리즘
+    dfsLeft(idx+1, sum+iv[idx]); // ********************** 특정한 갯수 뽑는 것이 아닌 모든 가능한 부분집함을 구하는 방법(조합)
+}
+
+void dfsRight(int idx, int sum){
+    if(idx == N){
+        ans += counter[S-sum];
+        return;
+    }
+    dfsRight(idx+1, sum);
+    dfsRight(idx+1, sum+iv[idx]);
+}
+
+int main(){
+    cin >> N >> S;
+    
+    half = N/2; iv.resize(N);
+    for(int i=0; i<N; i++){
+        cin >> iv[i];
+    }
+   
+    dfsLeft(0, 0);
+    dfsRight(half, 0);
+    if(S == 0) ans--;
+    cout << ans;
+    return 0;
+}
