@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+
+using namespace std;
+
+
+int main(void)
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    int N, S;
+    cin >> N >> S;
+    
+    map<int, int> mp;
+    vector<int> iv(N); int half = N/2;
+    for (int i = 0; i < N; i++)
+        cin >> iv[i];
+ 
+    vector<int> v1(1<<half), v2(1<<(N-half));
+//    for(int i=0; i<N; i++){
+//        if(i>half){
+//            v2.push_back(iv[i]);
+//        }
+//        else v1.push_back(iv[i]);
+//    }
+    
+    int ans = 0;
+    
+    for(int i=0; i<(1<<half); i++){
+        for(int j=0; j<half; j++){
+            if(i & (1<<j)){
+                v1[i] += iv[j];
+            }
+        }
+        mp[v1[i]]++;
+    }
+    
+    for(int i=0; i<(1<<(N-half)); i++){
+        for(int j=0; j<N-half; j++){
+            if(i & (1<<j)){
+                v2[i] += iv[j+half];
+            }
+        }
+        ans += mp[S-v2[i]];
+    }
+    
+    if(S==0) ans--;
+    cout << ans;
+    return 0;
+}
+
