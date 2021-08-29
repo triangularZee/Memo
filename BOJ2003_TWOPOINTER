@@ -1,49 +1,33 @@
 #include <iostream>
+#include <vector>
+
 using namespace std;
- 
-const int MAX = 10000;
- 
-int arr[MAX];
- 
-int main(void)
-{
-        ios_base::sync_with_stdio(0);
-        cin.tie(0);
-        int N, M;
-        cin >> N >> M;
-       
-        for (int i = 0; i < N; i++)
-                 cin >> arr[i];
- 
-        int low = 0, high = 0;
-        int sum = arr[0];
-        int result = 0;
- 
-        //투 포인터 알고리즘 적용
-        while(low <= high && high < N)
-        {
-                 if (sum < M)
-                         sum += arr[++high];
-                 else if (sum == M)
-                 {
-                         result++;
-                         sum += arr[++high];
-                 }
-                 else if (sum > M)
-                 {
-                         sum -= arr[low++];
-                         //low가 high를 역전하면 low에서부터 다시 시작
-                         if (low > high && low < N)
-                         {
-                                 high = low;
-                                 sum = arr[low];
-                         }
-                 }
+
+int N, M;
+
+int main(){
+    cin >> N >> M;
+    vector<int> arr;
+    
+    for(int i=0; i<N; i++){
+        int k;
+        cin >> k;
+        arr.push_back(k);
+    }
+    
+    int left = 0, right = 0, cnt = 0;
+    int sum = 0;
+    
+    while(left <= right && right <= N){ // right <= N 에서 < '=' 이부분이 있어야한다. 
+        if(sum < M) {
+            sum += arr[right++];
         }
-        cout << result << "\n";
-        return 0;
+        else if(sum >= M){
+            if(sum == M) cnt++;
+            sum -= arr[left++];
+        }
+    }
+    
+    cout << cnt;
+    return 0;
 }
-
-
-
-
