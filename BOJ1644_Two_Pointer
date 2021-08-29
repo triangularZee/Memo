@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+const int MAX = 4000001;
+vector<int> arr;
+bool Primer[MAX] = {1};
+
+void Sieve(){
+    for(int i=2; i<MAX; i++){
+        Primer[i] = true;
+    }
+    for(int i=2; i*i<=MAX; i++){
+        for(int j=i; i*j<=MAX; j++){
+            Primer[i*j] = false;
+        }
+    }
+    for(int i=2; i<MAX; i++){
+        if(Primer[i]) {arr.push_back(i);}
+    }
+}
+
+int main(){
+    int N;
+    cin >> N;
+    
+    Sieve();
+    int left = 0, right = 0, cnt = 0;
+    int sum = 0;
+    while(left <= right && right <= arr.size()){
+        if(sum < N) {
+            sum += arr[right++];
+        }
+        else if(sum >= N){
+            if(sum == N) cnt++;
+            sum -= arr[left++];
+        }
+    }
+    
+    cout << cnt;
+    return 0;
+}
