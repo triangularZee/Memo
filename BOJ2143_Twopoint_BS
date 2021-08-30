@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main(){
+    // 1. A의 부분합 -> 배열1
+    // 2. B의 부분합 -> 배열2
+    // 3. 배열1 sorting 후 배열1 기준 배열2 이분탐색(LB, UB)으로 카운팅
+    
+    vector<int> A, B, ss1, ss2;
+    int T;
+    cin >> T;
+    int n, m;
+    cin >> n; A.resize(n);
+    for(int i=0; i<n; i++) cin >> A[i];
+    cin >> m; B.resize(m);
+    for(int i=0; i<m; i++) cin >> B[i];
+    
+    int left = 0, right = 0, sum = 0;
+    while(left<A.size()){
+        sum += A[right++];
+        ss1.push_back(sum);
+        if(right == A.size()){
+            right = ++left; 
+            sum = 0;
+        }
+    }
+    
+    left = 0; right = 0; sum = 0;
+    while(left<B.size()){
+        sum += B[right++];
+        ss2.push_back(sum);
+        if(right == B.size()){
+            right = ++left;
+            sum = 0;
+        
+    }
+    
+    long long ret = 0;
+    sort(ss1.begin(), ss1.end());
+    sort(ss2.begin(), ss2.end());
+    for(int i=0; i<ss2.size(); i++){
+        long long lo = lower_bound(ss1.begin(), ss1.end(), T-ss2[i]) - ss1.begin();
+        long long hi = upper_bound(ss1.begin(), ss1.end(), T-ss2[i]) - ss1.begin();
+        
+        ret += (hi-lo);
+    }
+    
+    cout << ret;
+}
