@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+int main(){
+    int N, ret = 0, k;
+    unordered_map<int, int> mp;
+
+    cin >> N;
+    vector<int> iv[N];
+    for(int i=0; i<N; i++){
+        for(int j=0; j<4; j++){
+            cin >> k;
+            iv[i].push_back(k);
+        }
+    }
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            mp[iv[i][0]+iv[j][1]]++; // map, unordered_map에 최대 16,000,000개를 삽입하려하니 Map의 경우 48B, Unordered_map의 경우 24B. map이 아닌 다른 자료구조를 사용해야할듯.
+            // 특히 Unordered_map의 경우에 
+        }
+    }
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            ret += mp[-(iv[i][2]+iv[j][3])];
+        }
+    }
+    
+    cout << ret;
+    return 0;
+}
+
