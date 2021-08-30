@@ -1,0 +1,78 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main(){
+    // 1. A의 부분합 -> 배열1
+    // 2. B의 부분합 -> 배열2
+    // 3. 배열1 sorting 후 배열1 기준 배열2 이분탐색(LB, UB)으로 카운팅
+    
+    int S, m, n, k;
+    cin >> S >> m >> n;
+    vector<int> iv1(m), iv2(n), psv1(1,0), psv2(1,0); // ************* psv1(1,0) 등은 각 배열 내에서의 부분합만을 구하기 위해서 
+    for(int i=0; i<m; i++){
+        cin >> k;
+        iv1[i] = k;
+    }
+    
+    for(int i=0; i<n; i++){
+        cin >> k;
+        iv2[i] = k;
+    }
+    
+    int left = 0, right = 0, sum = 0;
+    while(left<iv1.size()){
+        sum += iv1[right++];
+        if(sum <= S){
+            psv1.push_back(sum);
+        }
+        else {
+            left++;
+            sum = 0;
+            right = left;
+        }
+        
+        if(right == iv1.size()) right = 0; // 원형큐 처리
+        if((!left && !right) || right + 1 == left){ // 처음부터 끝까지 다 더했을때 || 원형큐 넘어가다가 처음거 만나서 중복 생겨서 중복방지.
+            left++;
+            right = left;
+            sum = 0;
+        }
+    }
+    
+    left = 0; right = 0; sum = 0;
+    while(left<iv2.size()){
+        sum += iv2[right++];
+        if(sum <= S){
+            psv2.push_back(sum);
+        }
+        else {
+            left++;
+            sum = 0;
+            right = left;
+        }
+        
+        if(right == iv2.size()) right = 0;
+        if((!left && !right) || right + 1 == left){
+            left++;
+            right = left;
+            sum = 0;
+        }
+    }
+    
+    long long ret = 0;
+    sort(psv1.begin(), psv1.end());
+    sort(psv2.begin(), psv2.end());
+    for(int i=0; i<psv2.size(); i++){
+        long long lo = lower_bound(psv1.begin(), psv1.end(), S-psv2[i]) - psv1.begin();
+        long long hi = upper_bound(psv1.begin(), psv1.end(), S-psv2[i]) - psv1.begin();
+        
+        ret += (hi-lo);
+    }
+    
+    cout << ret;
+    return 0;
+}
+
