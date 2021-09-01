@@ -9,29 +9,30 @@ vector<int> solution(vector<string> info, vector<string> query) {
     
     for(int i=0; i<info.size(); i++){ // info split
         vector<string> temp;
-        int idx = 0;
+        int start = 0;
+        int space = info[i].find(' ');
         for(int j=0; j<4; j++){
-            int space = info[i].find(' ');
-            string ss = info[i].substr(idx, space);
-            idx = space+1;
+            string ss = info[i].substr(start, space - start);
             temp.push_back(ss);
+            start = space+1;
+            space = info[i].find(' ', start);
         }
-        int score = stoi(info[i].substr(idx));
-        
+        int score = stoi(info[i].substr(start, space-start));
         Info.push_back({temp[0], temp[1], temp[2], temp[3], score});
     }
     
     for(int i=0; i<query.size(); i++){ // query split
         vector<string> temp;
-        int idx = 0;
+         int start = 0;
+        int space = info[i].find(' ');
         for(int j=0; j<7; j++){
-            int space = query[i].find(' ');
-            string ss = query[i].substr(idx, space);
-            idx = space+1;
+            string ss = query[i].substr(start, space-start);
+            start = space+1;
+            space = query[i].find(' ', start);
             if(ss == "and") continue;
             temp.push_back(ss);
         }
-        int score = stoi(query[i].substr(idx));
+        int score = stoi(info[i].substr(start, space-start));
         
         Query.push_back({temp[0], temp[1], temp[2], temp[3], score});
     }
