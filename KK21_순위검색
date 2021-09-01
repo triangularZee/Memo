@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<int> solution(vector<string> info, vector<string> query) {
+    vector<int> answer;
+    
+    vector<tuple<string, string, string, string, int>> Info, Query;
+    
+    for(int i=0; i<info.size(); i++){ // info split
+        vector<string> temp;
+        int idx = 0;
+        for(int j=0; j<4; j++){
+            int space = info[i].find(' ');
+            string ss = info[i].substr(idx, space);
+            idx = space+1;
+            temp.push_back(ss);
+        }
+        int score = stoi(info[i].substr(idx));
+        
+        Info.push_back({temp[0], temp[1], temp[2], temp[3], score});
+    }
+    
+    for(int i=0; i<query.size(); i++){ // query split
+        vector<string> temp;
+        int idx = 0;
+        for(int j=0; j<7; j++){
+            int space = query[i].find(' ');
+            string ss = query[i].substr(idx, space);
+            idx = space+1;
+            if(ss == "and") continue;
+            temp.push_back(ss);
+        }
+        int score = stoi(query[i].substr(idx));
+        
+        Query.push_back({temp[0], temp[1], temp[2], temp[3], score});
+    }
+    
+    for(int i=0; i<Query.size(); i++){
+        int ans = 0;
+        for(int j=0; j<Info.size(); j++){
+                if( (get<0>(Query[i]) == "-" || (get<0>(Query[i]) == get<0>(Info[j]))) && 
+                    (get<1>(Query[i]) == "-" || (get<1>(Query[i]) == get<1>(Info[j]))) &&
+                    (get<2>(Query[i]) == "-" || (get<2>(Query[i]) == get<2>(Info[j]))) &&
+                    (get<3>(Query[i]) == "-" || (get<3>(Query[i]) == get<3>(Info[j]))) &&
+                    get<4>(Query[i]) <= get<4>(Info[j])) ans++;
+        }
+        answer.push_back(ans);
+    }
+    
+    return answer;
+}
