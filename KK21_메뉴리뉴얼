@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+map<string, int> mp;
+
+void DFS(int idx, string order, string s){ // 부분집합
+    if(idx == order.size()){
+        mp[s]++;
+        return;
+    }
+    DFS(idx+1, order, s);
+    DFS(idx+1, order, s+order[idx]);
+}
+
+vector<string> solution(vector<string> orders, vector<int> course) {
+    vector<string> answer;
+    
+    sort(orders.begin(), orders.end());
+    
+    for(int i=0; i<orders.size(); i++){ // 각 order들 문자열 소팅, 순열 방지 차원
+        sort(orders[i].begin(), orders[i].end());
+    }
+    
+    for(int i=0; i<orders.size(); i++){
+        DFS(0, orders[i], "");
+    }
+    
+    vector<string> vs; // 최종 답안으로서 오름차순으로 담기 위한 컨테이너 
+    for(int i=0; i<course.size(); i++){
+        vector<pair<int, string>> pv; // 코스 갯수 단위로 담기위한 컨테이너, 주문된 횟수에 맞춰 소팅하기 위해
+        for(auto it= mp.begin(); it!=mp.end(); it++){ 
+            if(it->first.size() == course[i] && it->second >= 2){ // 코스 갯수당 구하기
+                pv.push_back({it->second, it->first});
+            }
+        }
+        sort(pv.rbegin(), pv.rend()); // 내림차순 소팅
+        int Max = pv.begin()->first;
+        for(int i = 0; i<pv.size(); i++){
+            if(pv[i].first == Max){ // 최대 주문횟수에 해당하는 주문조합 filtering
+                vs.push_back(pv[i].second); 
+            }
+        }
+    }
+    
+    sort(vs.begin(), vs.end()); // 오름차순 소팅
+    answer = vs;
+
+    return answer;
+}
