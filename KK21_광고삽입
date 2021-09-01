@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int converter_sec(string time){ // "HH:MM:SS"
+    int idx = time.find(':'); int start = 0;
+    vector<int> arr = {3600, 60};
+    int t = 0, arr_pos = 0;
+    while(start != string::npos){
+        string ss = time.substr(start, idx-start);
+        t += arr[arr_pos++]*stoi(ss);
+        start = idx + 1;
+        idx = time.find(':',start);
+    }
+    t += stoi(time.substr(start, idx-start));
+    return t;
+}
+
+string solution(string play_time, string adv_time, vector<string> logs) {
+    string answer = "";
+    
+    // logs split to pair<end, start>
+    vector<pair<string, string>> splited_logs;
+    for(int i=0; i<logs.size(); i++){
+        int idx = logs[i].find('-');
+        splited_logs[i] = {logs[i].substr(idx+1), logs[i].substr(0,idx)};
+    }
+    
+    // sort splited_logs
+    sort(splited_logs.begin(), splited_logs.end());
+    
+    // measuring time-axis with each ending time
+    vector<int> length;
+    for(int i=0; i<logs.size(); i++){
+        int len = 0;
+        for(int j=0; j<logs.size(); j++){
+            int time = converter_sec(splited_logs[i].first); 
+            if(converter_sec(splited_logs[j].second)<=time){ // 스타트타임이 엔딩타임보다 작다면
+                len += time - converter_sec(splited_logs[j].second); // 엔딩 타임에서 각 스타트 타임을 뺀다.
+            }
+        }
+        length.push_back(len);
+    }
+    
+    sort(length.begin(), length.end());    
+    int hour = length.back()/3600;
+    int minute = length.back()%3600/60;
+    int sec = length.back()%3600%60;
+    string str = to_string(hour) + ':' + to_string(minute) + ':' + to_string(sec);
+    answer = str;
+    
+    return answer;
+}
