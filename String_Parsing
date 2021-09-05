@@ -1,3 +1,6 @@
+#include <sstream>
+#include <vector>
+#include <string>
 
 
 vector<vector<string>> parsing(vector<string> record){
