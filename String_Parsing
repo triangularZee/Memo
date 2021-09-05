@@ -1,0 +1,31 @@
+
+
+vector<vector<string>> parsing(vector<string> record){
+    vector<vector<string>> parse;
+    parse.resize(record.size());
+
+
+// 1. string.find() & string.substr 방식(대체적으로 2개일때 편함)
+     for(int i=0; i<record.size(); i++){
+         int start = 0;
+         int idx = record[i].find(' ');
+         while(idx != string::npos){
+             parse[i].push_back(record[i].substr(start, idx-start));
+             start = idx + 1;
+             idx = record[i].find(' ', start);
+         }
+         parse[i].push_back(record[i].substr(start, idx-start));
+     }
+     
+// 2. Input String Stream 방식 - delimiter가 하나인 경우)
+    for(int i=0; i<record.size(); i++){
+        istringstream ss(record[i]);
+        string sbf;
+        while(ss>>sbf){ //                 delimiter가 ' '의 경우
+        while(getline(ss,sbf,':')){ //     delimiter가 임의의 값이 경우
+            parse[i].push_back(sbf);
+        }
+    }
+    
+    return parse;
+}
