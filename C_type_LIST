@@ -1,0 +1,13 @@
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    int t[2] = {-1,};
+    for(int i=0; i<2; i++){
+        cout << t[i] << ' ';
+    }
+}
+
+The answer printed on console is << -1 0 >>.
+Watch out C_type list about {0, }
