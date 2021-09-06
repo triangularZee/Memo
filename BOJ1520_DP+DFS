@@ -1,0 +1,63 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+
+using namespace std;
+
+int DP[500][500];
+int M, N;
+vector<vector<int>> GO;
+
+
+int DFS(int m, int n){
+    if(m == M-1 && n == N-1){
+        return 1;
+    }
+
+    if(DP[m][n]!=-1) return DP[m][n];
+    int &val = DP[m][n];
+    val=0;
+
+    int dx[4] = {-1,0,1,0};
+    int dy[4] = {0,-1,0,1};
+
+    for(int k=0; k<4; k++){
+        int nm = m + dx[k], nn = n + dy[k];
+        if(0 <= nm && nm < M && 0 <= nn && nn < N){
+            if(GO[m][n] > GO[nm][nn]){
+                val += DFS(nm, nn);
+            }
+        }
+    }
+    return val;
+}
+
+int main(){
+    cin >> M >> N;
+
+    GO.resize(M);
+    for(int i=0; i<M; i++){
+        GO[i].resize(N);
+        for(int j=0; j<N; j++){
+            cin >> GO[i][j];
+            DP[i][j] = -1;
+        }
+    }
+
+
+    cout << DFS(0, 0);
+}
+
+
+
+//int solve(int k){ 일반적인 DP + DFS 템플릿 
+//    if(k==n) return;
+//    if(d[k]!=-1) return d[k];
+//    int &val = d[k];
+//    val=0; // d[k] 초기화
+//    // **
+//
+////  **//
+//    return val;
+//}
