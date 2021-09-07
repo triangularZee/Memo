@@ -11,3 +11,17 @@ int main(){
 
 The answer printed on console is << -1 0 >>.
 Watch out C_type list about {0, }
+
+
+다시 확인 해본 결과 
+
+int t[2] = {};
+int t[2] = {0,};
+의 경우는 모두 0으로 초기화
+
+그러나 
+
+int t[2] = {-1,};
+처럼 0이 아닌 값으로 초기화하려고 한다면 첫 원소만 초기화될 뿐 나머지 원소들으 모두 0이 된다. 
+만일 0이 아닌 값으로 초기화하고 싶다면 fill_n(t, sizeof(t)/(int), -1); 이런 방법.
+
