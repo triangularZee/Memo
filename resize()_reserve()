@@ -51,6 +51,18 @@ int main(){ .reserve() && indexing  --------- 아주 설명하기 어려운 케�
 // 어찌보면 연속적인 메모리에 높은 자유도를 가진 C처럼 포인터처럼 하는 행위를 제한하느 것이 C++으 철학 탓이 아닐까...
 // 랜덤액세스라서 사실상 큰 문제는 없는거 같은데 다만 vector 입장에서 대입연산으 통해 삽입/삭제를 알 수 있는 도리ㄱ 없을뿐
 
+
+int main(){
+    vector<int> a;
+    a.reserve(2);
+    a[0] = 1;
+    a.push_back(2);
+    cout << a.size();
+}
+
+ ----- > << 1 >>  push_back(), pop_back에만 count에 대한 access가 되는 것으로 보임.
+
+
 vector a; 
 a.reserve(5); 
 for(int i=0; i<5; i++){ 
