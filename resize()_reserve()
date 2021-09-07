@@ -1,0 +1,70 @@
+int main(){ // 선언&초기화 
+vector a(5); 
+for(int i=0; i<5; i++){
+a.push_back(1); cout << a[i] << ' '; }
+} 
+
+----> << 0, 0, 0, 0, 0 >>
+
+int main(){ // resize 
+vector a;
+a.resize(5);
+for(int i=0; i<5; i++){ 
+a.push_back(1); 
+cout << a[i] << ' '; } 
+}
+
+----> << 0, 0, 0, 0, 0 >>
+
+int main(){ // reserve
+vector a; a.reserve(5);
+for(int i=0; i<5; i++){
+a.push_back(1); 
+cout << a[i] << ' '; }
+}
+
+----> << 1, 1, 1, 1, 1 >>
+
+int main(){ vector a;
+a.resize(5); 
+for(int i=0; i<5; i++){
+a[i] = 1; 
+cout << a[i] << ' '; 
+} 
+cout << endl << a.size() << endl << a.capacity(); 
+}
+
+----> << 1, 1, 1, 1, 1, 5, 5 >>
+
+int main(){ .reserve() && indexing 
+vector a; 
+a.reserve(5); 
+for(int i=0; i<5; i++){ 
+a[i] = 1; cout << a[i] << ' ';
+}
+cout << endl << a.size() << endl << a.capacity(); 
+}
+
+----> << 1, 1, 1, 1, 1, 0, 5 >>
+
+int main(){ // .reserve() && push_back.() 
+vector a; 
+a.reserve(5);
+for(int i=0; i<5; i++){
+a.push_back(1); cout << a[i] << ' ';
+} 
+cout << endl << a.size() << endl << a.capacity();
+}
+
+----> << 1, 1, 1, 1, 1, 5, 5 >>
+
+int main(){ // .resize() & .push_back() 
+vector a;
+a.resize(5); 
+for(int i=0; i<5; i++){ 
+a.push_back(1); cout << a[i] << ' ';
+} 
+cout << endl << a.size() << endl << a.capacity();
+}
+
+----> << 0, 0, 0, 0, 0, 10, 10 >>
