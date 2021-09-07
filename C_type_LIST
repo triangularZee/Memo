@@ -26,3 +26,4 @@ int t[2] = {-1,};
 만일 0이 아닌 값으로 초기화하고 싶다면 fill_n(t, sizeof(t)/(int), -1); 이런 방법.
 
 t_size sizeof()는 메모리 점유량을 나타내는 함수(byte addressable)
+ 
