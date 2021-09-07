@@ -1,3 +1,11 @@
+Def) capacity : the number of elements that the container has currently allocated space for.
+Def) size     : the number of elements in the container.
+
+shrink_to_fit() ; fit capacity to size
+
+
+
+
 int main(){ // 선언&초기화 
 vector a(5); 
 for(int i=0; i<5; i++){
@@ -36,7 +44,7 @@ cout << endl << a.size() << endl << a.capacity();
 
 ----> << 1, 1, 1, 1, 1, 5, 5 >>
 
-int main(){ .reserve() && indexing 
+int main(){ .reserve() && indexing  --------- 아주 설명하기 어려운 케이스. 조금 더 알아보길 요망.
 vector a; 
 a.reserve(5); 
 for(int i=0; i<5; i++){ 
@@ -68,3 +76,21 @@ cout << endl << a.size() << endl << a.capacity();
 }
 
 ----> << 0, 0, 0, 0, 0, 10, 10 >>
+
+
+
+
+int main(){ // .reserve() && push_back.() beyond the number allocated
+    vector<int> a;
+    a.reserve(5);
+    for(int i=0; i<6; i++){
+        a.push_back(1);
+        cout << a[i] << ' ';
+    }
+    cout << endl << a.size() << endl << a.capacity();
+}
+
+
+----> << 1, 1, 1, 1, 1, 6, 10 >>
+
+
