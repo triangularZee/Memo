@@ -1,0 +1,40 @@
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    int bitmask[(1<<20)] = {0,};
+    int temp;
+    while(scanf("%d", &temp)!=-1){
+        int address = temp/32;
+        int offset = temp%32;
+        if(!(bitmask[address] & (1<<offset))){
+            printf("%d ", temp);
+            bitmask[address] |= (1<<offset);
+        }
+    }
+}
+
+
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <bitset>
+
+using namespace std;
+
+int main(){
+    bitset<(1<<25)> bs;
+    int s;
+    
+    while(scanf("%d", &s)!=-1){
+        if(!bs[s]){
+            bs[s]=1;
+            printf("%d ",s);
+        }
+    }
+}
