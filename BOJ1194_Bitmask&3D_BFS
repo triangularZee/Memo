@@ -1,0 +1,88 @@
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <bitset>
+#include <queue>
+
+using namespace std;
+
+char GO[50][50];
+bool visited[64][50][50];
+int N, M;
+
+// 열쇠 발견시 key[x - 'a'] = true;
+// 문 발견식 if(key[x - 'A'])
+// 기저는 if(GO(x,y) == '1'
+
+void bfs(int n, int m){ // '0'인 좌표값 집어넣어서 q에 집어넣기
+    queue<pair<pair<int,int>,pair<int,int>>> q;
+    
+    q.push({{n,m},{0,0}});
+    
+    while(!q.empty()){
+        int temp_x = q.front().first.first;
+        int temp_y = q.front().first.second;
+        int step = q.front().second.first;
+        int key = q.front().second.second;
+        q.pop();
+        
+        if(GO[temp_x][temp_y] == '1'){
+            cout << step;
+            return;
+        }
+        
+        int dn[4] = {-1,0,1,0};
+        int dm[4] = {0,1,0,-1};
+        for(int i=0; i<4; i++){
+            int nn = temp_x + dn[i], nm = temp_y + dm[i];
+            if(0<=nn && nn< N && 0<=nm && nm< M && !visited[key][nn][nm] && GO[nn][nm] != '#'){
+                if(GO[nn][nm] == '.' || GO[nn][nm] == '0' || GO[nn][nm] == '1'){
+                    visited[key][nn][nm] = true;
+                    q.push({{nn,nm},{step+1,key}});
+                }
+                else if('a'<=GO[nn][nm] && GO[nn][nm] <='f'){
+                    int newKey = key | (1<<(GO[nn][nm]-'a'));
+                    if(!visited[newKey][nn][nm]){
+                        visited[key][nn][nm] = true; // 이부분은 왜 하는 걸까?
+                        visited[newKey][nn][nm] = true;
+                        q.push({{nn,nm},{step+1, newKey}});
+                    }
+                }
+                else if('A'<=GO[nn][nm] && GO[nn][nm] <= 'F'){
+                    if(key & (1<<(GO[nn][nm]-'A'))){
+                        visited[key][nn][nm] = true;
+                        q.push({{nn,nm},{step+1,key}});
+                    }
+                }
+            }
+        }
+    }
+    cout << -1;
+}
+
+int main(){
+    
+    
+    cin >> N >> M;
+    
+    
+    for(int i=0; i<N; i++){
+        for(int j=0; j<M; j++){
+            cin>> GO[i][j];
+        }
+    }
+    
+    int x, y;
+    for(int i=0; i<N; i++){
+        for(int j=0; j<M; j++){
+            if(GO[i][j] == '0'){
+                x=i;
+                y=j;
+            }
+        }
+    }
+    
+    bfs(x, y);
+    return 0;
+}
