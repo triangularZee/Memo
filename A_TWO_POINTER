@@ -1,0 +1,72 @@
+#include <unordered_map>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include <bitset>
+
+using namespace std;
+
+
+
+
+int main(){
+    
+    int T, N, M, k;
+    unordered_map<long long, long long> mp;
+    
+    cin >> T >> N;
+    vector<int> iv1(N);
+    for(int i=0; i<N; i++){
+        cin >> iv1[i];
+    }
+    
+    cin >> M;
+    vector<int> iv2(M);
+    for(int i=0; i<M; i++){
+        cin >> iv2[i];
+    }
+    
+    long long max = 0;
+    long long sum = 0, left = 0, right = 0;
+    while(left < N){ // CASE - iv1
+        sum += iv1[right++];
+        if(sum <= T){ // 부분합이 T 이하인 경우 해시테이블에 저장. T라면 전진 후 초기화.
+            mp[sum]++;
+            if(sum == T){
+                sum = 0;
+                left++;
+                right = left;
+            }
+        }
+        else { // 부분합이 T를 넘어서는 경우 전진 후 초기화.
+            sum = 0;
+            left++;
+            right = left;
+        }
+    }
+    
+    sum = 0; left = 0; right = 0;
+    while(left < M){ // CASE - iv2                  """""""""""""""""left<M""""""""""""""""""
+        sum += iv2[right++];
+        if(sum <= T){
+            max += mp[T-sum];
+            if(sum == T){
+                sum =0;
+                left++;
+                right = left;
+            }
+        }
+        else {
+            sum = 0;
+            left++;
+            right = left;
+        }
+    }
+    
+    
+    cout << max;
+    
+    return 0;
+    
+}
