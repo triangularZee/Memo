@@ -30,6 +30,11 @@ int main(){
     long long max = 0;
     long long sum = 0, left = 0, right = 0;
     while(left < N){ // CASE - iv1
+        if(right >= N){
+            sum = 0;
+            left++;
+            right = left;
+        }
         sum += iv1[right++];
         if(sum <= T){ // 부분합이 T 이하인 경우 해시테이블에 저장. T라면 전진 후 초기화.
             mp[sum]++;
@@ -48,6 +53,11 @@ int main(){
     
     sum = 0; left = 0; right = 0;
     while(left < M){ // CASE - iv2                  """""""""""""""""left<M""""""""""""""""""
+         if(right >= M){
+            sum = 0;
+            left++;
+            right = left;
+        }
         sum += iv2[right++];
         if(sum <= T){
             max += mp[T-sum];
