@@ -34,6 +34,7 @@ int main(){
             sum = 0;
             left++;
             right = left;
+            continue;
         }
         sum += iv1[right++];
         if(sum <= T){ // 부분합이 T 이하인 경우 해시테이블에 저장. T라면 전진 후 초기화.
@@ -57,6 +58,7 @@ int main(){
             sum = 0;
             left++;
             right = left;
+            continue
         }
         sum += iv2[right++];
         if(sum <= T){
