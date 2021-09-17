@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+long long solution(int n, vector<int> times) {
+    
+    // find t s.t. t/t1 + t/t2 + ... = n
+    int len = times.size();
+    sort(times.begin(), times.end());
+    long long left = times[0] * (len/n + 1), right = 1L * n * times[len-1];
+    while(left <= right){
+        long long mid = (left+right)/2;
+        long long temp =0;
+        for(int i=0; i<times.size(); i++){
+            temp += mid/times[i];
+        }
+        if(temp>=n){
+            right = mid-1;
+        }
+        else {
+            left = mid+1;
+        }
+    }
+    
+    return left;
+}
