@@ -1,0 +1,66 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+int solution(int distance, vector<int> rocks, int n) {
+    int answer = 0;
+    
+    sort(rocks.begin(), rocks.end()); // 바위 위치 정렬
+    rocks.push_back(distance); // 마지막 끝 값 추가
+    
+    vector<int> distances;
+    int rock = 0;
+    for(int i=0; i<rocks.size(); i++){ // 거리 배열 만들어주기. ex) 2 9 3 3 4 4
+        distances.push_back(rocks[i]-rock);
+        rock = rocks[i];
+    }
+    
+    vector<int> temp = distances;
+    sort(temp.begin(), temp.end());
+    priority_queue<int, vector<int>, greater<int>> pq;
+    for(int i=0; i<n; i++){ // 우선순위큐에 최소값 n개 삽입
+        pq.push(temp[i]);
+    }
+    
+    for(int i=0; i<n; i++){ // **** distances 배열은 정렬되어있지 않음. 이 경우에는 이분탐색을 활용할 수 없음. iterator std::find(...) 를 사용해야함
+        int lowest_idx = lower_bound(distances.begin(), distances.end(), pq.top()) - distances.begin(); // 제일 작은 값 인덱스
+        pq.pop();
+        
+        if(lowest_idx == 0){ // 가장 앞선
+            distances[lowest_idx] += distances[lowest_idx+1];
+            pq.push(distances[lowest_idx]);
+            distances.erase(distances.begin()+lowest_idx+1);
+        }
+        else if(lowest_idx == distances.size()-1){ // 가장 끝
+            distances[lowest_idx] += distances[lowest_idx-1];
+            pq.push(distances[lowest_idx]);
+            distances.erase(distances.begin()+lowest_idx-1);
+        }
+        else { // 사이
+            if(distances[lowest_idx+1] >= distances[lowest_idx-1]){
+                distances[lowest_idx] += distances[lowest_idx-1];
+                pq.push(distances[lowest_idx]);
+                distances.erase(distances.begin()+lowest_idx-1);
+            }
+            else{
+                distances[lowest_idx] += distances[lowest_idx+1];
+                pq.push(distances[lowest_idx]);
+                distances.erase(distances.begin()+lowest_idx+1);
+            }
+        }
+        distances.shrink_to_fit();
+    }
+    
+    sort(distances.begin(), distances.end());
+    // 가장 작은 값을 n개 찾아내야됨. 
+    // 1. 소팅 후 가장 작은 값의 인덱스 찾기... 5만이라 가능.
+    // 2. 그 값을 어떤 값이랑 더해줄 것인가? 앞? 뒤? 앞 뒤 더해보고 더 작은 값이 되는 쪽으로 더해줌.
+    // 3. 제거 후 shrink_to_fit() 등 업데이트.
+    // 4. 1-3을 n회 반복
+    
+    answer = distances.front();
+    // return answer;
+}
