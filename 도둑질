@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int solution(vector<int> money) {
+    vector<int> v1(money.size()), v2(money.size());
+    v1[0] = money[0]; 
+    v1[1] = money[0]; // v1; 0번 집 방문 경우
+    v2[0] = 0;
+    v2[1] = money[1]; // v2; 1번 집 방문 경우
+    
+    for(int i=2; i<money.size()-1; i++){
+        v1[i] = max(v1[i-2]+money[i], v1[i-1]);
+    }
+    
+    for(int i=2; i<money.size(); i++){
+        v2[i] = max(v2[i-2]+money[i], v2[i-1]);
+    }
+    
+    
+    return max(v1[money.size()-2], v2[money.size()-1]);
+}
