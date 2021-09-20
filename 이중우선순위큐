@@ -31,6 +31,6 @@ vector<int> solution(vector<string> operations) {
         answer.push_back(*ms.begin());
     }
     
-    
+     
     return answer;
 }
