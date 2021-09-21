@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// int lowest_step;
+// int answer = 0;
+// int visited[101][101] = {0,};
+// int dm[2] = {0,1};
+// int dn[2] = {1,0};
+
+
+int solution(int m, int n, vector<vector<int>> puddles) {
+    
+    
+    
+    // puddle이 제외한
+    // bfs? dfs? bfs로 최단경로 찾은 뒤 dfs로 확인... 
+    
+    
+//     queue<pair<int,int>> q;
+//     q.push({1,1});
+//     while(!q.empty()){
+//         int temp_m = q.front().first;
+//         int temp_n = q.front().second;
+//         q.pop();
+        
+//         if(temp_m == m && temp_n == n){
+//             continue;
+//         }
+        
+        
+        
+//         for(int k=0; k<2; k++){
+//             int new_m = temp_m + dm[k], new_n = temp_n + dn[k];
+//                 if(0<=new_m && 0<=new_n && new_m<=m && new_n<=n && !GO[new_m][new_n]){
+//                     if(visited[new_m][new_n] != visited[temp_m][temp_n]+1){
+//                         visited[new_m][new_n] = visited[temp_m][temp_n] + 1;
+//                         q.push({new_m, new_n});
+//                     }
+//                 }
+//             }
+//         }
+    
+//     return (visited[m][n]-1)%1000000007;
+    
+    int GO[101][101] = {};
+
+    GO[1][1] = 1;
+    
+    for(int i=0; i<puddles.size(); i++)
+    {
+        GO[puddles[i][1]][puddles[i][0]] = -1;
+    }
+    
+    for(int i=1; i<=n; i++)
+    {
+        for(int j=1; j<=m; j++)
+        {
+            int FromAbove = 0;
+            int FromLeft = 0;
+            if(GO[i][j]== -1)
+            {
+                continue;    
+            }
+            if(GO[i-1][j]!=-1)
+            {
+                FromAbove = GO[i-1][j];
+            }
+            if(GO[i][j-1]!=-1)
+            {
+                FromLeft = GO[i][j-1];
+            }
+            GO[i][j] += (FromAbove + FromLeft)%1000000007;
+        }
+    }
+    
+    return GO[n][m];
+}
