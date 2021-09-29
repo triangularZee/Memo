@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+bool cmp(pair<int, string>& p1, pair<int,string>& p2)
+{
+    return p1.first > p2.first;
+}
+
+pair<string, string> parsing(string& musicinfo){
+    pair<string, string> music; 
+
+    int time = 60 * stoi(musicinfo.substr(6,2)) + stoi(musicinfo.substr(9,2)) - 60 * stoi(musicinfo.substr(0,2)) - stoi(musicinfo.substr(3,2));
+
+    int idx = musicinfo.find(',', 12);
+    string notes = musicinfo.substr(idx+1);
+
+    for(int i=0; i<notes.size(); i++){
+        if(notes[i] == '#'){
+            notes[i-1] = tolower(notes[i-1]);
+            notes.erase(i + notes.begin());
+        }
+    }
+
+    string musicName = musicinfo.substr(12,idx-12);
+    string augmentedNotes = "";
+    for(int i=0; i<time; i++){
+        int idx = i % notes.size();                                       // 환형큐의 경우에는 mod를 활용
+        augmentedNotes += notes[idx];
+    }
+
+    music = { musicName + ',' + to_string(time) , augmentedNotes };
+    return music;
+}
+
+string solution(string m, vector<string> musicinfos) {
+    string answer = "(None)";
+
+    for(int i=0; i<m.size(); i++){
+        if(m[i] == '#'){
+            m[i-1] = tolower(m[i-1]);
+            m.erase(i + m.begin());
+
+
+        }
+    }
+    vector<pair<int, string>> container;
+    for(int i=0; i<musicinfos.size(); i++){
+        string musicinfo = musicinfos[i];
+
+        pair<string, string> music; // 노래제목, 확장된 노래멜로디
+        music = parsing(musicinfo);
+
+        for(int j=0; j<music.second.size(); j++)
+        {
+            int idx = 0;
+            int PC = 0;
+            if(music.second[j] == m[idx])
+            {
+                PC = j;                                                   // PC(program counter)처럼 
+                while(music.second[j++] == m[idx++])
+                {
+                    if(idx == m.size())
+                    {
+                        int parseidx = music.first.find(',');
+                        container.push_back({stoi(music.first.substr(parseidx+1)), music.first.substr(0, parseidx)});
+                    }
+                }
+                j = PC;                                                   // PC(program counter)처럼
+            }
+        }
+
+        // if(int found = music.second.find(m) != string::npos){          // 이 방식도 실제로 통과함. std::string::find는 more than one character 또한 검색가능(cppref 주소)
+        //     int parseidx = music.first.find(',');
+        //     container.push_back({stoi(music.first.substr(parseidx+1)), music.first.substr(0, parseidx)});
+        // }
+    }
+
+    if(container.size()){
+        sort(container.begin(), container.end(), cmp);
+        answer = container.front().second;
+    }
+
+    return answer;
+}
