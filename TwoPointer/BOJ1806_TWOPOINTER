@@ -1,34 +1,39 @@
+#include <unordered_set>
 #include <iostream>
 #include <vector>
-#include <map>
+#include <string>
+
 using namespace std;
 
-int N, M;
-map<int,int> checker;
-
 int main(){
+    int N, M;
     cin >> N >> M;
-    vector<int> arr;
     
+    int series[100000];
     for(int i=0; i<N; i++){
-        int k;
-        cin >> k;
-        arr.push_back(k);
+        cin >> series[i];
     }
     
-    int left = 0, right = 0, cnt = 0;
-    int sum = 0;
-    
-    while(left <= right && right <= N){
-        if(sum < M) {
-            sum += arr[right++];
+    int Min = 987654321;
+    int left = 0, right = 0, sum = series[0];
+    while(left <= right && right < N){
+        if(sum < M){
+            sum += series[++right];
         }
-        else if(sum >= M){
-            checker[right-left]++;
-            sum -= arr[left++];
+        else{
+            Min = min(Min, right-left+1);
+            sum -= series[left++];
+        }
+        if(left > right && left < N){
+            right = left;
+            sum = series[right];
         }
     }
-    if(checker.empty()) { cout << 0; return 0;}
-    cout << checker.begin()->first;
+    
+    if(Min == 987654321){
+        Min = 0;
+    }
+    cout << Min;
     return 0;
 }
+
