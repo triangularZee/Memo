@@ -1,33 +1,39 @@
+#include <unordered_set>
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
-int N, M;
-
 int main(){
+    int N, M;
     cin >> N >> M;
-    vector<int> arr;
     
+    int series[10000];
     for(int i=0; i<N; i++){
-        int k;
-        cin >> k;
-        arr.push_back(k);
+        cin >> series[i];
     }
     
-    int left = 0, right = 0, cnt = 0;
-    int sum = 0;
-    
-    while(left <= right && right <= N){ // right <= N 에서 < '=' 이부분이 있어야한다. 
-        if(sum < M) {
-            sum += arr[right++];
+    int left = 0, right = 0, sum = series[0];
+    int ans = 0;
+    while(right<N){
+        if(sum >= M){
+            if(sum == M) {
+                ans++;
+            }
+            sum -= series[left++]; //** check!
         }
-        else if(sum >= M){
-            if(sum == M) cnt++;
-            sum -= arr[left++];
+        else {
+            sum += series[++right];
         }
+        if(left > right && left < N){ //** check!
+            right = left;
+            sum = series[right];
+        }
+        
     }
-    
-    cout << cnt;
+    cout << ans;
     return 0;
 }
+
+
