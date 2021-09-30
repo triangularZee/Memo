@@ -27,19 +27,18 @@ int main(){
     cin >> N;
     
     Sieve();
-    int left = 0, right = 0, cnt = 0;
-    int sum = 0;
-    while(left <= right && right <= arr.size()){
-        if(sum < N) {
-            sum += arr[right++];
+    int left = 0, right = 0, sum = arr[0], answer = 0;
+    while(left <= right && right < arr.size()){
+        if(sum < N){
+            sum += arr[++right];
         }
-        else if(sum >= N){
-            if(sum == N) cnt++;
+        else{
+            if(sum == N) {
+                answer++;
+            }
             sum -= arr[left++];
         }
     }
-    
-    cout << cnt;
+    cout << answer;
     return 0;
 }
- 
