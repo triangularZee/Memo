@@ -44,7 +44,7 @@ int main(){
     for(int i=0; i<ss2.size(); i++){
         long long lo = lower_bound(ss1.begin(), ss1.end(), T-ss2[i]) - ss1.begin();
         long long hi = upper_bound(ss1.begin(), ss1.end(), T-ss2[i]) - ss1.begin();
-        
+         
         ret += (hi-lo);
     }
     
