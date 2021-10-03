@@ -1,0 +1,121 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int MAX = 25;
+
+int dx[4] = {0,1,0,-1};
+int dy[4] = {1,0,-1,0};
+int visited[MAX][MAX][4];
+vector<int> iv;
+
+void bfs(int x, int y, vector<vector<int>> board){
+    priority_queue<pair<pair<int,int>,pair<int,int>>, vector<pair<pair<int,int>,pair<int,int>>>, greater<pair<pair<int,int>,pair<int,int>>>> pq;
+    pq.push({{0,10},{0,0}}); // 운임, 방향, m좌표, n좌표
+    while(!pq.empty()){
+        int fee = pq.top().first.first;
+        int dir = pq.top().first.second;
+        int m = pq.top().second.first;
+        int n = pq.top().second.second;
+        pq.pop();
+        
+        if(m == x && n == y){
+            iv.push_back(fee);
+            continue;
+        }
+        
+        for(int k=0; k<4; k++){
+            int nm = m + dx[k], nn = n + dy[k];
+            if(0<=nm && nm <= x && 0<=nn && nn <=y && !board[nm][nn]){
+                if(dir == 10 || dir == k && visited[nm][nn][dir] > fee+100) {
+                    visited[nm][nn][dir] = fee+100;
+                    pq.push({{fee+100,k},{nm,nn}});
+                }
+                else if(dir!=k && visited[nm][nn][dir] > fee+600) {
+                    visited[nm][nn][dir] = fee+600;
+                    pq.push({{fee+600,k},{nm,nn}});
+                }
+                
+            }
+        }
+    }
+}
+
+int solution(vector<vector<int>> board) {
+    int answer = 0;
+    
+    board[0][0] = 1;
+    memset(visited, 9999999, sizeof(visited));
+    bfs(board.size()-1,board.size()-1,board);
+    sort(iv.begin(), iv.end());
+    
+    answer = iv.front();
+    
+    return answer;
+}
+
+int main(){
+    vector<vector<int>> board = {{0,0,0},{0,0,0},{0,0,0}};
+    int k = solution(board);
+    cout << k;
+}
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int MAX = 25;
+
+int dx[4] = {0,1,0,-1};
+int dy[4] = {1,0,-1,0};
+int visited[MAX][MAX];
+bool checker[MAX][MAX];
+int Min = 987654321;
+
+void dfs(int m, int n, int dir, vector<vector<int>>& board){
+    if(m == board.size()-1 && n == board.size()-1){
+        Min = min(Min,visited[m][n]);
+        return;
+    }
+    
+    if(Min <= visited[m][n]) {
+        return;
+    }    
+    
+    for(int k=0; k<4; k++){
+        int nm = m + dx[k], nn = n + dy[k], nc;
+        if(0<= nm && 0<=nn && nm < board.size() && nn < board.size() && !board[nm][nn] && !checker[nm][nn]){
+            
+            if(dir == 10 || dir == k){
+                nc = visited[m][n] + 100;
+            }
+            else {
+                nc = visited[m][n] + 600;
+            }
+            
+            if(visited[nm][nn] >= nc){
+                visited[nm][nn] = nc;
+                checker[nm][nn] = true;
+                dfs(nm, nn, k, board);
+                checker[nm][nn] = false;
+            }
+        }
+    }
+}
+
+
+
+int solution(vector<vector<int>> board) {
+    int answer = 0;
+    
+    
+    memset(visited, 9999999, sizeof(visited));
+    
+    board[0][0] = 1;
+    visited[0][0] = 0;
+    dfs(0, 0, 10, board);
+    
+    answer = Min;
+    
+    return answer;
+}
