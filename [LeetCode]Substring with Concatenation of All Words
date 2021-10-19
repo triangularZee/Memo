@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        unordered_map<string, int> strCount;
+        for(string str : words)
+        {
+            strCount[str]++;
+        }
+        
+        vector<int> startIdxs;
+        int num = words.size(), len = words[0].size(), InputLen = s.size();
+        if(!num || !InputLen)
+        {
+            return startIdxs;        
+        }
+
+        for(int i=0; i<InputLen - len * num + 1; i++)
+        {
+            unordered_map<string, int> seen;
+            int j = 0;
+            for( ; j < num ; j++)
+            {
+                string word = s.substr(i + len * j, len);
+                
+                if(s.find(word) != string::npos)
+                {
+                    seen[word]++;
+                    if(seen[word]>strCount[word])
+                    {
+                        break;
+                    }   
+                }
+                else 
+                {
+                    break;
+                }
+            }
+            if(j == num) 
+            {
+                
+                startIdxs.push_back(i);
+            }
+        }
+        
+        return startIdxs;
+    }
+};
