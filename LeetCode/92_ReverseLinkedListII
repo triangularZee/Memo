@@ -8,16 +8,17 @@ class Solution:
         if left == right:
             return head
         
-        p = node = ListNode(None)
+        node = ListNode(None)
         node.next = head
         
+        cur, prev = head, node
         for _ in range(left-1):
-            p = p.next
-        damn = None
-        tail = p.next
+            prev = prev.next
+            cur = cur.next
+            
         for _ in range(right-left):
-            temp = p.next
-            p.next = tail.next
-            tail.next = tail.next.next
-            p.next.next = temp 
+            temp = cur.next
+            cur.next = temp.next
+            temp.next = prev.next
+            prev.next = temp
         return node.next
