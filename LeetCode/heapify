@@ -1,0 +1,42 @@
+class BinaryMinHeap(object):
+    def __init__(self):
+        # 연산의 편의성을 위해 가장 앞 인덱스는 비워둔다.
+        self.items = [None]
+
+    def __len__(self):
+        return len(self.items) - 1
+
+    def _percolate_up(self):
+        i = len(self)
+        parent = i // 2
+        while parent > 0:
+            if self.item[parent] > self.item[i]:
+                self.item[parent], self.item[i] = \
+                self.item[i], self.item[parent]
+                i = parent
+                parent = i // 2
+
+    def insert(self, item):
+        self.items.append(item)
+        self._percolate_up()
+
+    def _percolate_down(self, idx):
+        left = 2 * idx
+        right = 2 * idx + 1
+        smallest = idx
+        
+        if left <= len(self) and self.items[left] < self.items[smallest]:
+            smallest = left
+        if right <= len(self) and self.items[right] < self.items[smallest]:
+            smallest = right
+        
+        if smallest != idx:
+            self.items[smallest], self.items[idx] = self.items[idx], self.items[smallest]
+            self._percolate_up(smallest)
+            
+    def extract(self):
+        ret = self.items[1]
+        self.items[1] = self.items[len(self)]
+        self.items.pop()
+        self._percolate_down(1)
+        return ret
